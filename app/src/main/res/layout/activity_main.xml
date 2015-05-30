@@ -14,7 +14,23 @@
         android:id="@+id/header"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp" />
+        android:layout_marginTop="52dp"
+        android:paddingTop="30dp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_changeip"
+        android:inputType="text"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Change IP"
+        android:id="@+id/btn_changeip"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:layout_width="wrap_content"
@@ -25,7 +41,7 @@
         android:layout_below="@+id/header"
         android:layout_alignLeft="@+id/backwardButton"
         android:layout_alignStart="@+id/forwardButton"
-        android:onClick="forward"/>
+        tools:ignore="HardcodedText" />
 
     <Button
         android:layout_width="wrap_content"
@@ -35,7 +51,9 @@
         android:layout_below="@+id/forwardButton"
         android:layout_toRightOf="@+id/forwardButton"
         android:layout_toEndOf="@+id/forwardButton"
-        android:onClick="right"/>
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        tools:ignore="HardcodedText"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -45,7 +63,7 @@
         android:layout_above="@+id/backwardButton"
         android:layout_toLeftOf="@+id/backwardButton"
         android:layout_toStartOf="@+id/backwardButton"
-        android:onClick="left"/>
+        tools:ignore="HardcodedText"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -54,7 +72,7 @@
         android:id="@+id/backwardButton"
         android:layout_below="@+id/rightButton"
         android:layout_centerHorizontal="true"
-        android:onClick="backward"/>
+        tools:ignore="HardcodedText"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -65,7 +83,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/backwardButton"
         android:layout_toStartOf="@+id/backwardButton"
-        android:onClick="connect"/>
+        tools:ignore="HardcodedText"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -75,14 +93,15 @@
         android:layout_alignTop="@+id/connectButton"
         android:layout_toRightOf="@+id/backwardButton"
         android:layout_toEndOf="@+id/backwardButton"
-        android:onClick="disconnect"/>
+        tools:ignore="HardcodedText"/>
 
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/disconnectButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></GridLayout>
+        android:layout_alignParentStart="true"
+        tools:ignore="UselessLeaf"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -90,5 +109,6 @@
         android:text="Stop"
         android:id="@+id/stopButton"
         android:layout_alignTop="@+id/rightButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        tools:ignore="HardcodedText"/>
 </RelativeLayout>

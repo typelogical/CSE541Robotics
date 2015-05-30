@@ -1,103 +1,136 @@
 package csusb.cse541.william.cse541robotics;
-/*
 
-
- */
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.StrictMode;
 import android.view.View;
-
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.io.IOException;
-import java.util.Scanner;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
+
+    private WifiController wifiCtrl = null;
+    private String WifiIP = Constants.REMOTE_IP_ADDRESS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_main);
+
+        wifiCtrl = new WifiController();
+
+        Button btn_changeip = (Button)findViewById(R.id.btn_changeip);
+        btn_changeip.setOnClickListener(ocl_changeip);
+
+        Button btn_forward = (Button)findViewById(R.id.forwardButton);
+        btn_forward.setOnClickListener(ocl_forward);
+
+        Button btn_backward = (Button)findViewById(R.id.backwardButton);
+        btn_backward.setOnClickListener(ocl_backward);
+
+        Button btn_right = (Button)findViewById(R.id.rightButton);
+        btn_right.setOnClickListener(ocl_right);
+
+        Button btn_left = (Button)findViewById(R.id.leftButton);
+        btn_left.setOnClickListener(ocl_left);
+
+        Button btn_stop = (Button)findViewById(R.id.stopButton);
+        btn_stop.setOnClickListener(ocl_stop);
+
+        Button btn_connect = (Button)findViewById(R.id.connectButton);
+        btn_connect.setOnClickListener(ocl_connect);
+
+        Button btn_disconnect = (Button)findViewById(R.id.disconnectButton);
+        btn_disconnect.setOnClickListener(ocl_disconnect);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    /* Connect to the arduino robot */
-    public void connect (View view) {
-        wifiCtrl.connect (Constants.REMOTE_IP_ADDRESS, Constants.REMOTE_PORT);
-    }
     /* Disconnect from the arduino robot */
-    public void disconnect (View view) {
-        try {
-            wifiCtrl.disconnect ();
-        } catch (IOException e) {
-            e.printStackTrace();
+    View.OnClickListener ocl_disconnect = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
+    };
 
-    /* Move the robot forward */
-    public void forward (View view) {
-        try {
-            wifiCtrl.send(Constants.FORWARD_SIG);
-        } catch (IOException e) {
-            e.printStackTrace();
+    /* Connect to the arduino robot */
+    View.OnClickListener ocl_connect = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            wifiCtrl.connect (WifiIP, Constants.REMOTE_PORT, MainActivity.this);
         }
-    }
-    /* Move the robot backward */
-    public void backward (View view) {
-        try {
-            wifiCtrl.send (Constants.BACKWARD_SIG);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /* Move the robot left */
-    public void left (View view) {
-        try {
-            wifiCtrl.send (Constants.LEFT_SIG);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /* Move the robot right */
-    public void right (View view) {
-        try {
-            wifiCtrl.send (Constants.RIGHT_SIG);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /* Stop the robot */
-    public void stop (View view) {
-        try {
-            wifiCtrl.send (Constants.STOP_SIG);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    };
 
-    public void testConnection () {
+    View.OnClickListener ocl_forward = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.send(Constants.FORWARD_SIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
-    }
-    private WifiController wifiCtrl;
+    View.OnClickListener ocl_backward = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.send(Constants.BACKWARD_SIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    View.OnClickListener ocl_right = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.send(Constants.RIGHT_SIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    View.OnClickListener ocl_left = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.send(Constants.LEFT_SIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    View.OnClickListener ocl_stop = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                wifiCtrl.send(Constants.STOP_SIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    View.OnClickListener ocl_changeip = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            EditText et_changeip = (EditText)findViewById(R.id.et_changeip);
+            WifiIP = et_changeip.getText().toString();
+        }
+    };
+
 }
