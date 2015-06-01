@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import java.io.IOException;
 
@@ -48,6 +49,11 @@ public class MainActivity extends Activity {
 
         Button btn_disconnect = (Button)findViewById(R.id.disconnectButton);
         btn_disconnect.setOnClickListener(ocl_disconnect);
+
+        SeekBar skbrSpeed = (SeekBar)findViewById(R.id.skbrSpeedBar);
+        skbrSpeed.setOnDragListener(oclChangeSpeed);
+
+
     }
 
     /* Disconnect from the arduino robot */
@@ -133,4 +139,19 @@ public class MainActivity extends Activity {
         }
     };
 
-}
+    View.OnDragListener oclChangeSpeed = new View.OnDragListener () {
+        @Override
+        public boolean onDrag(View v, android.view.DragEvent evt) {
+            SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
+            String newSpeed = ((Integer) skbrSpeed.getProgress()).toString();
+            try {
+                wifiCtrl.send(newSpeed);    // This should be a single digit to avoid fast speed changes
+            } catch (
+                    IOException e
+                    ) {
+                e.printStackTrace();
+            }
+               return true;
+        }
+    };
+    }

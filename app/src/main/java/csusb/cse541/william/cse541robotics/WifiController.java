@@ -19,7 +19,6 @@ public class WifiController {
     public WifiController () {}
     /* Connect to a remote client using specified ip address and port */
     public void connect (String ipAddress, int port, Activity act) {
-
         try {
             soc = new Socket(ipAddress, port);
         } catch (IOException e) {
