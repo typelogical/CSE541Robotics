@@ -100,7 +100,6 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/disconnectButton"
         tools:ignore="UselessLeaf"
-        android:id="@+id/"
         android:rowCount="1"
         android:columnCount="102"
         android:layout_toRightOf="@+id/editText"

@@ -45,7 +45,11 @@ public class WifiController {
         soc.close ();
     }
     /* Send the specified msg to the connected remote client */
-    public void send (String msg) throws IOException {
+    public void send (String msg) throws Exception {
+        if (soc == null) {
+            throw new Exception ();
+        }
+
         out.write (msg.getBytes());
     }
     /* Get a message if available from the remote client */
