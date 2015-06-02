@@ -19,6 +19,7 @@ public class WifiController {
     public WifiController () {}
     /* Connect to a remote client using specified ip address and port */
     public void connect (String ipAddress, int port, Activity act) {
+
         try {
             soc = new Socket(ipAddress, port);
         } catch (IOException e) {
@@ -45,11 +46,7 @@ public class WifiController {
         soc.close ();
     }
     /* Send the specified msg to the connected remote client */
-    public void send (String msg) throws Exception {
-        if (soc == null) {
-            throw new Exception ();
-        }
-
+    public void send (String msg) throws IOException {
         out.write (msg.getBytes());
     }
     /* Get a message if available from the remote client */
