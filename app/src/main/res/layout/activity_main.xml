@@ -37,11 +37,11 @@
         android:layout_height="wrap_content"
         android:text="forward"
         android:id="@+id/forwardButton"
-        android:layout_marginTop="101dp"
+        android:layout_marginTop="63dp"
+        tools:ignore="HardcodedText"
         android:layout_below="@+id/header"
-        android:layout_alignLeft="@+id/backwardButton"
-        android:layout_alignStart="@+id/forwardButton"
-        tools:ignore="HardcodedText" />
+        android:layout_toRightOf="@+id/leftButton"
+        android:layout_toEndOf="@+id/leftButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -86,38 +86,63 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/stopButton"
+        android:layout_alignTop="@+id/rightButton"
+        android:layout_centerHorizontal="true"
+        tools:ignore="HardcodedText"/>
+
+    <GridLayout
+        android:id="@+id/grid_speedlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/modeButton"
+        tools:ignore="UselessLeaf"
+        android:rowCount="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Speed"
+            android:id="@+id/speedLabel"
+            android:layout_marginTop="52dp"
+            tools:ignore="HardcodedText" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/skbrSpeedBar"
+            android:layout_marginTop="46dp"
+            android:layout_row="0"
+            android:layout_column="101"
+            android:indeterminate="false"
+            android:max="255"
+            android:progress="51" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/grid_speedlayout"
+        android:gravity="center">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Connect"
         android:id="@+id/connectButton"
-        android:layout_marginBottom="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/backwardButton"
-        android:layout_toStartOf="@+id/backwardButton"
-        tools:ignore="HardcodedText"/>
+        android:layout_margin="10dp"
+        tools:ignore="ButtonStyle,HardcodedText" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Disconnect"
         android:id="@+id/disconnectButton"
-        android:layout_alignTop="@+id/connectButton"
-        android:layout_toRightOf="@+id/backwardButton"
-        android:layout_toEndOf="@+id/backwardButton"
-        tools:ignore="HardcodedText"/>
+        android:layout_margin="10dp"
+        tools:ignore="ButtonStyle,HardcodedText"/>
+    </LinearLayout>
 
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/disconnectButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        tools:ignore="UselessLeaf"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:id="@+id/stopButton"
-        android:layout_alignTop="@+id/rightButton"
-        android:layout_centerHorizontal="true"
-        tools:ignore="HardcodedText"/>
 </RelativeLayout>
