@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.widget.RelativeLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +17,11 @@ import java.io.IOException;
 public class MainActivity extends Activity {
     private WifiController wifiCtrl = null;
     private String WifiIP = Constants.REMOTE_IP_ADDRESS;
+
+    private int axisY1_value = 0;
+    private int axisY2_value = 0;
+    private boolean isConnected = false;
+    private int mode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,11 @@ public class MainActivity extends Activity {
         SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
         skbrSpeed.setOnSeekBarChangeListener(oclChangeSpeed);
 
+        RelativeLayout rl_mainactivity = (RelativeLayout) findViewById(R.id.activity_main);
+        rl_mainactivity.setOnTouchListener(otl_wheelcontrol);
+
+        Button btn_mode = (Button) findViewById(R.id.modeButton);
+        btn_mode.setOnClickListener(ocl_mode);
 
     }
 
@@ -63,6 +76,24 @@ public class MainActivity extends Activity {
                 wifiCtrl.disconnect();
             } catch (IOException e) {
                 sendEHandler();
+            }
+
+            isConnected = false;
+            String mdata = "a";
+            char spd = (char) 1;
+            mdata += spd;
+            try {
+                wifiCtrl.send(mdata);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mdata = "b";
+            spd = (char) 1;
+            mdata += spd;
+            try {
+                wifiCtrl.send(mdata);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };
@@ -151,8 +182,11 @@ public class MainActivity extends Activity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            String newSpeed = "k";
             SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
-            String newSpeed = ((Integer) skbrSpeed.getProgress()).toString();
+            int _spd = skbrSpeed.getProgress();
+            char spd = (char) _spd;
+            newSpeed += spd;
             try {
                 wifiCtrl.send(newSpeed);    // This should be a single digit to avoid fast speed changes
             } catch (Exception e) {
@@ -169,6 +203,100 @@ public class MainActivity extends Activity {
                 .setMessage (R.string.noConnMsg).setCancelable(true).setPositiveButton(R.string.posBtnTxt, null)
                 .create ().show ();
     }
+
+
+    View.OnClickListener ocl_mode = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if(mode == 1)
+                mode = 2;
+            else
+                mode = 1;
+
+            String m_mode = "m";
+            char _m = (char) mode;
+            m_mode += _m;
+
+            try {
+                wifiCtrl.send(m_mode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    View.OnTouchListener otl_wheelcontrol = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int axisX1_value = (int) event.getX(0);
+            int nTouch = event.getPointerCount();
+
+            int boundY = 1546;
+            if(nTouch == 1) {
+                if (axisX1_value >= 0 && axisX1_value <= 1299) { // Left touch area is the left wheel
+                    axisY1_value = (boundY - (int)event.getY(0)) - (boundY /2);
+                } else { // Right touch area
+                    axisY2_value = (boundY - (int)event.getY(0)) - (boundY /2);
+                }
+            } else if(nTouch == 2) {
+
+                int axisX2_value = (int) event.getX(1);
+                axisY2_value = (int)event.getY(1);
+
+                if (axisX1_value >= 0 && axisX1_value <= 1299) { // Left touch area is the left wheel
+                    axisY1_value = (boundY - (int)event.getY(0)) - (boundY /2);
+                } else {
+                    axisY2_value = (boundY - (int)event.getY(0)) - (boundY /2);
+                }
+
+                if (axisX2_value >= 0 && axisX2_value <= 1299) { // Left touch area is the left wheel
+                    axisY1_value = (boundY - (int)event.getY(1)) - (boundY /2);
+                } else {
+                    axisY2_value = (boundY - (int)event.getY(1)) - (boundY /2);
+                }
+            }
+
+            String mdata = "a";
+            float __spd = ((float)axisY1_value/800.0f) * 255.0f;
+            int _spd = (int)__spd;
+            if(_spd < 0)
+                mdata = "c";
+            char spd = (char) Math.abs(_spd);
+
+            mdata += spd;
+
+            if(isConnected) {
+                try {
+                    wifiCtrl.send(mdata);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            String mdata2 = "b";
+            __spd = ((float)axisY2_value/800.0f) * 255.0f;
+            _spd = (int)__spd;
+            if(_spd < 0)
+                mdata2 = "d";
+            spd = (char) Math.abs(_spd);
+
+            mdata2 += spd;
+
+            if(isConnected) {
+                try {
+                    wifiCtrl.send(mdata2);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Log.i("Touch Y", Integer.toString(axisY1_value) + " " + Integer.toString(axisY2_value) + " " + mdata);
+
+            return true;
+        }
+    };
 }
 
    
