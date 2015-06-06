@@ -77,49 +77,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connect"
-        android:id="@+id/connectButton"
-        tools:ignore="HardcodedText"
-        android:layout_below="@+id/editText"
-        android:layout_toLeftOf="@+id/backwardButton"
-        android:layout_toStartOf="@+id/backwardButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Disconnect"
-        android:id="@+id/disconnectButton"
-        tools:ignore="HardcodedText"
-        android:layout_alignBaseline="@+id/connectButton"
-        android:layout_alignBottom="@+id/connectButton"
-        android:layout_alignLeft="@+id/rightButton"
-        android:layout_alignStart="@+id/rightButton" />
-
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/disconnectButton"
-        tools:ignore="UselessLeaf"
-        android:rowCount="1"
-        android:columnCount="102"
-        android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:layout_width="214dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/skbrSpeedBar"
-            android:layout_below="@+id/header"
-            android:layout_toLeftOf="@+id/seekBar"
-            android:layout_toStartOf="@+id/seekBar"
-            android:layout_marginTop="46dp"
-            android:layout_row="0"
-            android:layout_column="101"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="0" />
-    </GridLayout>
+        android:text="Mode"
+        android:id="@+id/modeButton"
+        android:layout_below="@+id/backwardButton"
+        android:layout_centerHorizontal="true"
+        tools:ignore="HardcodedText"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -130,33 +92,57 @@
         android:layout_centerHorizontal="true"
         tools:ignore="HardcodedText"/>
 
-    <SeekBar
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:id="@+id/grid_speedlayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
-        android:layout_alignTop="@+id/header"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/modeButton"
+        tools:ignore="UselessLeaf"
+        android:rowCount="1"
+        android:orientation="horizontal">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/backwardButton"
-        android:layout_toLeftOf="@+id/header"
-        android:layout_toStartOf="@+id/header"
-        android:layout_marginRight="40dp"
-        android:layout_marginEnd="40dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Speed"
+            android:id="@+id/speedLabel"
+            android:layout_marginTop="52dp"
+            tools:ignore="HardcodedText" />
 
-    <TextView
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/skbrSpeedBar"
+            android:layout_marginTop="46dp"
+            android:layout_row="0"
+            android:layout_column="101"
+            android:indeterminate="false"
+            android:max="255"
+            android:progress="51" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/grid_speedlayout"
+        android:gravity="center">
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Speed"
-        android:id="@+id/speedLabel"
-        android:layout_below="@+id/connectButton"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_marginTop="52dp" />
+        android:text="Connect"
+        android:id="@+id/connectButton"
+        android:layout_margin="10dp"
+        tools:ignore="ButtonStyle,HardcodedText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disconnect"
+        android:id="@+id/disconnectButton"
+        android:layout_margin="10dp"
+        tools:ignore="ButtonStyle,HardcodedText"/>
+    </LinearLayout>
 
 </RelativeLayout>
