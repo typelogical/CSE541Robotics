@@ -71,7 +71,11 @@ public class MainActivity extends Activity {
     View.OnClickListener ocl_connect = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            wifiCtrl.connect(WifiIP, Constants.REMOTE_PORT, MainActivity.this);
+            final String msg = "IP: " + WifiIP;
+            try {
+                wifiCtrl.connect(WifiIP, Constants.REMOTE_PORT, MainActivity.this);
+                new AlertDialog.Builder(MainActivity.this).setTitle("Connected!").setMessage(msg).setPositiveButton("Okay", null).create().show();
+            } catch (Exception e)f
         }
     };
 

@@ -27,19 +27,12 @@ public class WifiController {
             return;
         }
 
-        if(!soc.isConnected()) {
-            new AlertDialog.Builder(act).setTitle("Unable to Connect! 1").setPositiveButton("Okay", null).create().show();
-            return;
-        }
-
         try {
             //inS = soc.getInputStream();
             out = soc.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final String msg = "IP: " + ipAddress + ".\nPort: " + Integer.toString(port);
-        new AlertDialog.Builder(act).setTitle("Connected!").setMessage(msg).setPositiveButton("Okay", null).create().show();
     }
     public void disconnect () throws IOException{
         soc.close ();
