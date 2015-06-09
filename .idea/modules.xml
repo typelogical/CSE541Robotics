@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CSE541Robotics.iml" filepath="$PROJECT_DIR$/CSE541Robotics.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file:///students/csci/003369183/Desktop/RobotProject/Debug/Debug.iml" filepath="/students/csci/003369183/Desktop/RobotProject/Debug/Debug.iml" />
+      <module fileurl="file:///students/csci/003369183/Desktop/RobotProject/Debug/app/app.iml" filepath="/students/csci/003369183/Desktop/RobotProject/Debug/app/app.iml" />
     </modules>
   </component>
 </project>
-

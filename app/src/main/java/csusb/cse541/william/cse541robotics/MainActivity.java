@@ -1,18 +1,9 @@
 package csusb.cse541.william.cse541robotics;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.RelativeLayout;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SeekBar;
-
-import java.io.IOException;
 
 public class MainActivity extends Activity {
 
@@ -25,12 +16,8 @@ public class MainActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_main);
 
-        wifiCtrl = new WifiController();
-
-
-        SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
-        skbrSpeed.setOnSeekBarChangeListener(oclChangeSpeed);
-
+        //SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
+        //skbrSpeed.setOnSeekBarChangeListener(oclChangeSpeed);
 
 
     }
@@ -38,7 +25,7 @@ public class MainActivity extends Activity {
 
     /* Connect to the arduino robot */
     private void createButtons() {
-        ClickListener ocl = new ClickListener(wifiCtrl);
+        ClickListener ocl = new ClickListener(this);
         Button btn_changeip = (Button) findViewById(R.id.btn_changeip);
         btn_changeip.setOnClickListener(ocl);
 
@@ -64,11 +51,11 @@ public class MainActivity extends Activity {
         btn_disconnect.setOnClickListener(ocl);
 
         Button recordButton = (Button) findViewById(R.id.recordButton);
-        recordButton.setOnClickListener (ocl);
+        recordButton.setOnClickListener(ocl);
     }
 
 
-    SeekBar.OnSeekBarChangeListener oclChangeSpeed = new SeekBar.OnSeekBarChangeListener() {
+/*    SeekBar.OnSeekBarChangeListener oclChangeSpeed = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             String newSpeed = "k";
@@ -110,8 +97,8 @@ public class MainActivity extends Activity {
 
         }
 
-    };
+    };*/
      /* Send */
 
 
-   
+}
