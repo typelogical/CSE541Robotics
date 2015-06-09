@@ -18,23 +18,11 @@ public class WifiController {
 
     public WifiController () {}
     /* Connect to a remote client using specified ip address and port */
-    public void connect (String ipAddress, int port, Activity act) {
-        try {
-            soc = new Socket(ipAddress, port);
-        } catch (IOException e) {
-            e.printStackTrace();
-            new AlertDialog.Builder(act).setTitle("Unable to Connect! 0").setMessage("IP: " + ipAddress + ".").setPositiveButton("Okay", null).create().show();
-            return;
-        }
-
-        try {
-            //inS = soc.getInputStream();
-            out = soc.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void connect (String ipAddress, int port, Activity act) throws Exception {
+        soc = new Socket(ipAddress, port);
+        out = soc.getOutputStream();
     }
-    public void disconnect () throws IOException{
+    public void disconnect () throws Exception{
         soc.close ();
     }
     /* Send the specified msg to the connected remote client */

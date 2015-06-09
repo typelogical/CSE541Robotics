@@ -17,11 +17,15 @@ import java.io.IOException;
 public class MainActivity extends Activity {
     private WifiController wifiCtrl = null;
     private String WifiIP = Constants.REMOTE_IP_ADDRESS;
-
     private int axisY1_value = 0;
     private int axisY2_value = 0;
     private boolean isConnected = false;
     private int mode = 1;
+    private String speed;
+    Timer timer;
+    Route route;
+    private boolean recording;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,10 @@ public class MainActivity extends Activity {
         Button btn_mode = (Button) findViewById(R.id.modeButton);
         btn_mode.setOnClickListener(ocl_mode);
 
+        Button recordButton = (Button) findViewById(R.id.recordButton);
+
+
+
     }
 
     /* Disconnect from the arduino robot */
@@ -74,7 +82,7 @@ public class MainActivity extends Activity {
         public void onClick(View v) {
             try {
                 wifiCtrl.disconnect();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 sendEHandler();
             }
 
@@ -98,6 +106,7 @@ public class MainActivity extends Activity {
         }
     };
 
+
     /* Connect to the arduino robot */
     View.OnClickListener ocl_connect = new View.OnClickListener() {
         @Override
@@ -105,8 +114,10 @@ public class MainActivity extends Activity {
             final String msg = "IP: " + WifiIP;
             try {
                 wifiCtrl.connect(WifiIP, Constants.REMOTE_PORT, MainActivity.this);
-                new AlertDialog.Builder(MainActivity.this).setTitle("Connected!").setMessage(msg).setPositiveButton("Okay", null).create().show();
-            } catch (Exception e)f
+                msgBox ("Connected", msg);
+            } catch (Exception e) {
+                msgBox ("Not Connected", msg);
+            }
         }
     };
 
@@ -175,16 +186,6 @@ public class MainActivity extends Activity {
 
     SeekBar.OnSeekBarChangeListener oclChangeSpeed = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             String newSpeed = "k";
             SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
@@ -193,26 +194,25 @@ public class MainActivity extends Activity {
             newSpeed += spd;
             try {
                 wifiCtrl.send(newSpeed);    // This should be a single digit to avoid fast speed changes
+                speed = newSpeed;
             } catch (Exception e) {
-                new AlertDialog.Builder(MainActivity.this).setTitle(R.string.connectionErrDialogTitle)
-                        .setMessage(R.string.noConnMsg).setCancelable(true).setPositiveButton(R.string.posBtnTxt, null)
-                        .create().show();
+                sendEHandler();
             }
         }
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
     };
-
-    private void sendEHandler () {
-        new AlertDialog.Builder (MainActivity.this).setTitle (R.string.connectionErrDialogTitle)
-                .setMessage (R.string.noConnMsg).setCancelable(true).setPositiveButton(R.string.posBtnTxt, null)
-                .create ().show ();
-    }
-
 
     View.OnClickListener ocl_mode = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             if(mode == 1)
                 mode = 2;
             else
@@ -277,8 +277,6 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                 }
             }
-
-
             String mdata2 = "b";
             __spd = ((float)axisY2_value/800.0f) * 255.0f;
             _spd = (int)__spd;
@@ -301,6 +299,49 @@ public class MainActivity extends Activity {
             return true;
         }
     };
+
+    View.OnClickListener oclRecord = new View.OnClickListener()  {
+        @Override
+        public void onClick (View v) {
+            if (recording) {
+                recording = false;
+                msgBox("Record", "Stopped Recording.");
+            } else {
+                recording = true;
+                timer = new Timer();
+                timer.start();
+                route = new Route ();
+                msgBox("Record", "Started Recording.");
+            }
+
+        }
+
+    };
+     /* Send */
+
+    public void send (String msg) {
+        if (recording) {
+            long time = this.timer.getDuration();
+            RouteNode node = new RouteNode(msg, this.speed, (int) time);
+            Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed" + Integer.parseInt(this.speed) +
+                    ", Time: " + time + "secs");
+            route.addToRoute(node);
+        }
+
+        try {
+            wifiCtrl.send (msg);
+        } catch (Exception e) {
+            sendEHandler();
+        }
+    }
+    private void sendEHandler () {
+        new AlertDialog.Builder (MainActivity.this).setTitle (R.string.connectionErrDialogTitle)
+                .setMessage (R.string.noConnMsg).setCancelable(true).setPositiveButton(R.string.posBtnTxt, null)
+                .create ().show ();
+    }
+    public void msgBox (String title, String msg) {
+        new AlertDialog.Builder(MainActivity.this).setTitle(title).setMessage(msg).setPositiveButton("Okay", null).create().show();
+    }
 }
 
    

@@ -4,7 +4,11 @@ class RouteNode {
         private String speed;
         private String  direction;
         private int time;
-
+        public RouteNode (String direction, String speed, int time) {
+            this.direction = direction;
+            this.speed = speed;
+            this.time = time;
+        }
         public String getSpeed() {
             return speed;
         }
