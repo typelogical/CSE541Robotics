@@ -42,7 +42,6 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
     }
     @Override
      public void onClick (View v){
-
         switch (v.getId ()) {
             case R.id.btn_changeip: {
                 EditText et_changeip = (EditText) act.findViewById(R.id.et_changeip);
@@ -86,60 +85,51 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
 
             case R.id.playButton:
                 playing ^= true;
-                play_timer.start();
+                playBack ();
                 break;
 
             case R.id.recordButton:
                 recording ^= true;
-                if(recording)
-                    timer.start();
                 break;
         }
-
      }
-    public void send (String msg) {
+    private void send (String msg) {
         if (recording) {
+            record ();
+        }
+        try {
+            wifiCtrl.send(msg);
+        } catch (Exception e) {
+            sendEHandler();
+        }
+    }
+    
+    private void record () {
             long time = this.timer.getDuration();
             RouteNode node = new RouteNode(msg, this.speed, (int) time);
             Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed " + Integer.toString(this.speed) +
                     ", Time: " + Long.toString(time) + "secs");
             route.addToRoute(node);
-        }
+    }
+    
+    private void playBack () {
+        // Should play on it's own thread.
+        for (long k=0, startTime = System.currentTimeMillis(); k<route.getPathLength(), ++k) {
+            long routeTime = route.getLocation(k).getTime() * 1000;
+            String signal = route.getLocation(k).getDirection();
+            char spd = (char)route.getLocation(k).getSpeed();
+            signal += spd;
 
-        if(playing && !recording) {
-
-            // Should play on it's own thread.
-            int k=0;
-            while(k<route.getPathLength()) {
-                if(play_timer.getDuration() > route.getLocation(k).getTime()) {
-
-                    String signal = route.getLocation(k).getDirection();
-                    char spd = (char)route.getLocation(k).getSpeed();
-                    signal += spd;
-
-                    try {
-                        wifiCtrl.send(signal);
-                    } catch (Exception e) {
-                        sendEHandler();
-                    }
-
-                    play_timer.start();
-                    k++;
-                    Log.i("Playback Count", Integer.toString(k));
-                }
-            }
-
-
-        } else {
             try {
-                wifiCtrl.send(msg);
+                wifiCtrl.send(signal);
             } catch (Exception e) {
                 sendEHandler();
             }
+            // Sleep for the duration of the current node time
+            while (System.currentTimeMillis - startTime < routeTime);
+            Log.i("Playback Count", Integer.toString(k));
         }
     }
-
-
     private void sendEHandler () {
         new AlertDialog.Builder (act).setTitle (R.string.connectionErrDialogTitle)
                 .setMessage (R.string.noConnMsg).setCancelable(true).setPositiveButton(R.string.posBtnTxt, null)
