@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file:///students/csci/003369183/Desktop/RobotProject/Debug/Debug.iml" filepath="/students/csci/003369183/Desktop/RobotProject/Debug/Debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file:///students/csci/003369183/Desktop/RobotProject/Debug/app/app.iml" filepath="/students/csci/003369183/Desktop/RobotProject/Debug/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/deb.iml" filepath="$PROJECT_DIR$/deb.iml" />
     </modules>
   </component>
 </project>
+

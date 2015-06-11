@@ -31,6 +31,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
         route = new Route();
         Log.i("W", "w");
     }
+
     public ClickListener (WifiController wifCtrl, Activity a) {
         super ();
         this.wifiCtrl = wifCtrl;
@@ -87,6 +88,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
             case R.id.playButton:
                 playing ^= true;
                 play_timer.start();
+                playback();
                 break;
 
             case R.id.recordButton:
@@ -102,13 +104,22 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
             long time = this.timer.getDuration();
             RouteNode node = new RouteNode(msg, this.speed, (int) time);
             Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed " + Integer.toString(this.speed) +
-                    ", Time: " + Long.toString(time) + "secs");
+                    ", Time: " + Long.toString(time) + "msecs");
             route.addToRoute(node);
+            timer.start();
         }
 
-        if(playing && !recording) {
+        try {
+            wifiCtrl.send(msg);
+        } catch (Exception e) {
+            sendEHandler();
+        }
 
-            // Should play on it's own thread.
+    }
+
+    public void playback() {
+        // Should play on it's own thread.
+        if(playing && !recording && route.getPathLength()>0) {
             int k=0;
             while(k<route.getPathLength()) {
                 if(play_timer.getDuration() > route.getLocation(k).getTime()) {
@@ -128,17 +139,8 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
                     Log.i("Playback Count", Integer.toString(k));
                 }
             }
-
-
-        } else {
-            try {
-                wifiCtrl.send(msg);
-            } catch (Exception e) {
-                sendEHandler();
-            }
         }
     }
-
 
     private void sendEHandler () {
         new AlertDialog.Builder (act).setTitle (R.string.connectionErrDialogTitle)

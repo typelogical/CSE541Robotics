@@ -15,8 +15,8 @@ public class Timer {
         short milliToSecsFactor = 1000;
         endTime = System.currentTimeMillis();
         long time = endTime - startTime;
-        startTime = endTime;
-        return time / milliToSecsFactor ;
+        //startTime = endTime;
+        return time;// / milliToSecsFactor ;
     }
 
     private long startTime;
