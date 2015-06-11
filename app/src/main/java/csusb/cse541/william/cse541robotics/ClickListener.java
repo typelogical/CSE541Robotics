@@ -2,34 +2,44 @@ package csusb.cse541.william.cse541robotics;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 /**
  * Created by William on 6/8/2015.
  *
  */
 
-public class ClickListener implements View.OnClickListener {
+public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private WifiController wifiCtrl = null;
     private String WifiIP = Constants.REMOTE_IP_ADDRESS;
-    private String speed;
+    private int speed = 255;
     Activity act = null;
     Timer timer;
     Route route;
-    private boolean recording;
+    private boolean recording = false;
+    private boolean playing   = false;
     public ClickListener (Activity a) {
         super ();
         act = a;
+        timer = new Timer();
+        route = new Route();
+        Log.i("W", "w");
     }
     public ClickListener (WifiController wifCtrl, Activity a) {
         super ();
         this.wifiCtrl = wifCtrl;
         act = a;
+        timer = new Timer();
+        route = new Route();
+        Log.i("W", "w");
     }
     @Override
      public void onClick (View v){
+
         switch (v.getId ()) {
             case R.id.btn_changeip: {
                 EditText et_changeip = (EditText) act.findViewById(R.id.et_changeip);
@@ -41,19 +51,44 @@ public class ClickListener implements View.OnClickListener {
                     wifiCtrl.connect(WifiIP, Constants.REMOTE_PORT, act);
                     msgBox ("Connected", msg);
                 } catch (Exception e) {
-                    msgBox ("Not Connected", msg);
+                    msgBox ("Not Connected. Try To Reconnect?", msg, new AlertDialog.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            View v = act.findViewById(R.id.connectButton);
+                            ClickListener.this.onClick(v);
+                        }
+                    });
                 }
             }
             case R.id.forwardButton:
+                send(Constants.FORWARD_SIG);
             break;
+
             case R.id.leftButton:
+                send(Constants.LEFT_SIG);
                 break;
+
             case R.id.rightButton:
+                send(Constants.RIGHT_SIG);
                 break;
+
             case R.id.backwardButton:
+                send(Constants.BACKWARD_SIG);
                 break;
+
             case R.id.stopButton:
+                send(Constants.STOP_SIG);
+                break;
+
+            case R.id.playButton:
+                playing ^= true;
+                break;
+
             case R.id.recordButton:
+                recording ^= true;
+                if(recording)
+                    timer.start();
                 break;
         }
 
@@ -62,15 +97,21 @@ public class ClickListener implements View.OnClickListener {
         if (recording) {
             long time = this.timer.getDuration();
             RouteNode node = new RouteNode(msg, this.speed, (int) time);
-            Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed" + Integer.parseInt(this.speed) +
-                    ", Time: " + time + "secs");
+            Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed " + Integer.toString(this.speed) +
+                    ", Time: " + Long.toString(time) + "secs");
             route.addToRoute(node);
         }
 
-        try {
-            wifiCtrl.send (msg);
-        } catch (Exception e) {
-            sendEHandler();
+        if(playing && !recording) {
+
+            // Should play on it's own thread.
+
+        } else {
+            try {
+                wifiCtrl.send(msg);
+            } catch (Exception e) {
+                sendEHandler();
+            }
         }
     }
 
@@ -82,6 +123,34 @@ public class ClickListener implements View.OnClickListener {
     }
     public void msgBox (String title, String msg) {
         new AlertDialog.Builder(act).setTitle(title).setMessage(msg).setPositiveButton("Okay", null).create().show();
+    }
+
+    public void msgBox (String title, String msg, AlertDialog.OnClickListener ocl) {
+        new AlertDialog.Builder(act).setTitle(title).setMessage(msg).setNegativeButton("Cancel", null).setPositiveButton("Okay", ocl).create().show();
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        String newSpeed = "k";
+        SeekBar skbrSpeed = (SeekBar) act.findViewById(R.id.skbrSpeedBar);
+        speed = skbrSpeed.getProgress();
+        char spd = (char) speed;
+        newSpeed += spd;
+        try {
+            wifiCtrl.send(newSpeed);    // This should be a single digit to avoid fast speed changes
+        } catch (Exception e) {
+            sendEHandler();
+        }
     }
 }
 

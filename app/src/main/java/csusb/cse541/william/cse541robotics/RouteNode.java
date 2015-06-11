@@ -1,19 +1,19 @@
 package csusb.cse541.william.cse541robotics;
 
 class RouteNode {
-        private String speed;
+        private int speed;
         private String  direction;
         private int time;
-        public RouteNode (String direction, String speed, int time) {
+        public RouteNode (String direction, int speed, int time) {
             this.direction = direction;
             this.speed = speed;
             this.time = time;
         }
-        public String getSpeed() {
+        public int getSpeed() {
             return speed;
         }
 
-        public void setSpeed(String speed) {
+        public void setSpeed(int speed) {
             this.speed = speed;
         }
 

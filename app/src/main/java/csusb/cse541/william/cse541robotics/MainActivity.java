@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 public class MainActivity extends Activity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,13 +15,8 @@ public class MainActivity extends Activity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_main);
-
-        //SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
-        //skbrSpeed.setOnSeekBarChangeListener(oclChangeSpeed);
-
-
+        createButtons();
     }
-
 
     /* Connect to the arduino robot */
     private void createButtons() {
@@ -52,53 +47,11 @@ public class MainActivity extends Activity {
 
         Button recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(ocl);
+
+        Button playButton = (Button) findViewById(R.id.playButton);
+        playButton.setOnClickListener(ocl);
+
+        SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
+        skbrSpeed.setOnSeekBarChangeListener(ocl);
     }
-
-
-/*    SeekBar.OnSeekBarChangeListener oclChangeSpeed = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            String newSpeed = "k";
-            SeekBar skbrSpeed = (SeekBar) findViewById(R.id.skbrSpeedBar);
-            int _spd = skbrSpeed.getProgress();
-            char spd = (char) _spd;
-            newSpeed += spd;
-            try {
-                wifiCtrl.send(newSpeed);    // This should be a single digit to avoid fast speed changes
-                speed = newSpeed;
-            } catch (Exception e) {
-                sendEHandler();
-            }
-        }
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
-
-    View.OnClickListener oclRecord = new View.OnClickListener()  {
-        @Override
-        public void onClick (View v) {
-            if (recording) {
-                recording = false;
-                msgBox("Record", "Stopped Recording.");
-            } else {
-                recording = true;
-                timer = new Timer();
-                timer.start();
-                route = new Route ();
-                msgBox("Record", "Started Recording.");
-            }
-
-        }
-
-    };*/
-     /* Send */
-
-
 }

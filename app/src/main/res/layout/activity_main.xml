@@ -145,15 +145,27 @@
         android:layout_margin="10dp"
         tools:ignore="ButtonStyle,HardcodedText"/>
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Record"
-            android:id="@+id/recordButton"
-            android:layout_alignBottom="@+id/linearLayout"
-            android:layout_toRightOf="@+id/header"
-            android:layout_toEndOf="@+id/header"
-            android:checked="false" />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Record"
+        android:id="@+id/recordButton"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_toRightOf="@+id/header"
+        android:layout_toEndOf="@+id/header"
+        android:checked="false"
+        tools:ignore="HardcodedText" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        android:id="@+id/playButton"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_toRightOf="@+id/header"
+        android:layout_toEndOf="@+id/header"
+        android:checked="false"
+        tools:ignore="HardcodedText" />
 
     </LinearLayout>
 
