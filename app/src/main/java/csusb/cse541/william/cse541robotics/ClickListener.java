@@ -17,30 +17,24 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
     private WifiController wifiCtrl = null;
     private String WifiIP = Constants.REMOTE_IP_ADDRESS;
     private int speed = 255;
+    long total_time = 0;
     Activity act = null;
     Timer timer;
     Timer play_timer;
     Route route;
     private boolean recording = false;
     private boolean playing   = false;
+    Thread t_play;
+
     public ClickListener (Activity a) {
         super ();
         act = a;
         timer = new Timer();
         play_timer = new Timer();
         route = new Route();
-        Log.i("W", "w");
+        wifiCtrl = new WifiController();
     }
 
-    public ClickListener (WifiController wifCtrl, Activity a) {
-        super ();
-        this.wifiCtrl = wifCtrl;
-        act = a;
-        timer = new Timer();
-        play_timer = new Timer();
-        route = new Route();
-        Log.i("W", "w");
-    }
     @Override
      public void onClick (View v){
 
@@ -87,8 +81,10 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
 
             case R.id.playButton:
                 playing ^= true;
-                play_timer.start();
-                playback();
+                if(playing) {
+                    t_play = new Thread(new run_playbutton());
+                    play_timer.start();
+                }
                 break;
 
             case R.id.recordButton:
@@ -105,6 +101,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
             RouteNode node = new RouteNode(msg, this.speed, (int) time);
             Log.d ("RouteInfo: ", "Node " +  route.getPathLength() + ", Direction " + msg + ", Speed " + Integer.toString(this.speed) +
                     ", Time: " + Long.toString(time) + "msecs");
+            total_time += time;
             route.addToRoute(node);
             timer.start();
         }
@@ -117,28 +114,39 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
 
     }
 
-    public void playback() {
-        // Should play on it's own thread.
-        if(playing && !recording && route.getPathLength()>0) {
-            int k=0;
-            while(k<route.getPathLength()) {
-                if(play_timer.getDuration() > route.getLocation(k).getTime()) {
+    class run_playbutton implements Runnable {
+        @Override
+        public void run() {
+            if(playing && !recording && route.getPathLength()>0) {
+                int k=0;
+                while(k<route.getPathLength()) {
+                    if(play_timer.getDuration() > route.getLocation(k).getTime()) {
 
-                    String signal = route.getLocation(k).getDirection();
-                    char spd = (char)route.getLocation(k).getSpeed();
-                    signal += spd;
+                        String signal = route.getLocation(k).getDirection();
+                        char spd = (char)route.getLocation(k).getSpeed();
+                        signal += spd;
 
-                    try {
-                        wifiCtrl.send(signal);
-                    } catch (Exception e) {
-                        sendEHandler();
+                        try {
+                            wifiCtrl.send(signal);
+                            Thread.sleep(10L);
+                        } catch (Exception e) {
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendEHandler();
+                                }
+                            });
+
+                        }
+
+                        play_timer.start();
+                        k++;
+                        Log.i("Playback Count", Integer.toString(k));
                     }
-
-                    play_timer.start();
-                    k++;
-                    Log.i("Playback Count", Integer.toString(k));
                 }
             }
+
+            Log.i("Play Thread", "Done");
         }
     }
 

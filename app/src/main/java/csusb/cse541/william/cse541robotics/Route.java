@@ -2,15 +2,14 @@ package csusb.cse541.william.cse541robotics;
 
 /**
  * Created by William on 6/3/2015.
- */
-/***
-    This class represents a path or route that a robot travels along.
-    A route is composed of nodes. Each node specifies the
+ *
+ * This class represents a path or route that a robot travels along.
+ * A route is composed of nodes. Each node specifies the
  */
 import java.util.ArrayList;
 public class Route {
     public Route () {
-        routeNodes = new ArrayList();
+        routeNodes = new ArrayList<>();
     }
     /* Add to route */
     public void addToRoute (RouteNode node) {
