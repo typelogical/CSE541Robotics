@@ -1,0 +1,49 @@
+TASK csusb.cse541.william.cse541robotics id=13
+  ACTIVITY csusb.cse541.william.cse541robotics/.MainActivity b1ee8f98 pid=3673
+    Local Activity b1dc6e48 State:
+      mResumed=true mStopped=false mFinished=false
+      mLoadersStarted=true
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 310mcc260mnc en_US ldltr sw360dp w360dp h567dp 320dpi nrml port finger qwerty/v/v -nav/h s.5}
+    FragmentManager misc state:
+      mActivity=csusb.cse541.william.cse541robotics.MainActivity@b1dc6e48
+      mContainer=android.app.Activity$1@b1dc6fb8
+      mCurState=5 mStateSaved=false mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=5722531 (285 ms ago)
+    View Hierarchy:
+      com.android.internal.policy.impl.PhoneWindow$DecorView{b1dc8138 V.E..... R.....I. 0,0-720,1184}
+        android.widget.LinearLayout{b1dc92a0 V.E..... ......I. 0,0-720,1184}
+          android.view.ViewStub{b1dcc278 G.E..... ......I. 0,0-0,0 #102030e}
+          android.widget.FrameLayout{b1dcc728 V.ED.... ......I. 0,50-720,1184 #1020002 android:id/content}
+            android.widget.RelativeLayout{b1dce4a8 V.E..... ......I. 0,0-720,1134 #7f08003f app:id/activity_main}
+              android.widget.TextView{b1dceb30 V.ED.... ......I. 230,136-490,255 #7f080040 app:id/header}
+              android.widget.EditText{b1dd0078 VFED..CL .F....I. 32,32-688,115 #7f080041 app:id/et_changeip}
+              android.widget.Button{b1dd3e10 VFED..C. ......I. 32,92-688,188 #7f080042 app:id/btn_changeip}
+              android.widget.Button{b1de62e8 VFED..C. ......I. 257,381-430,477 #7f080043 app:id/forwardButton}
+              android.widget.Button{b1de6eb8 VFED..C. ......I. 460,477-592,573 #7f080045 app:id/rightButton}
+              android.widget.Button{b1de79d8 VFED..C. ......I. 129,477-257,573 #7f080044 app:id/leftButton}
+              android.widget.Button{b1de84f8 VFED..C. ......I. 257,573-462,669 #7f080046 app:id/backwardButton}
+              android.widget.Button{b1de9020 VFED..C. ......I. 290,669-429,765 #7f080047 app:id/modeButton}
+              android.widget.Button{b1de9b40 VFED..C. ......I. 296,477-424,573 #7f080048 app:id/stopButton}
+              android.widget.GridLayout{b1dea830 V.E..... ......I. 32,765-688,928 #7f080049 app:id/grid_speedlayout}
+                android.widget.TextView{b1deae10 V.ED.... ......I. 0,104-123,163 #7f08004a app:id/speedLabel}
+                android.widget.SeekBar{b1deb640 VFED.... ......I. 123,92-779,156 #7f08004b app:id/skbrSpeedBar}
+              android.widget.LinearLayout{b1e02018 V.E..... ......I. 32,928-688,1064 #7f08004c app:id/linearLayout}
+                android.widget.Button{b1e02470 VFED..C. ......I. 20,20-200,116 #7f08004d app:id/connectButton}
+                android.widget.Button{b1e02e98 VFED..C. ......I. 240,20-468,116 #7f08004e app:id/disconnectButton}
+                android.widget.ToggleButton{b1e03b08 VFED..C. ......I. 488,20-616,116 #7f08004f app:id/recordButton}
+                android.widget.ToggleButton{b1e27e98 VFED..C. ......I. 616,8-656,128 #7f080050 app:id/playButton}
+    Looper (main, tid 1) {b1dc1068}
+      Message 0: { when=+177ms callback=android.widget.Editor$Blink target=android.widget.Editor$Blink }
+      (Total messages: 1, idling=false, quitting=false)

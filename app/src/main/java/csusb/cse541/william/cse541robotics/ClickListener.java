@@ -19,6 +19,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
     private int speed = 255;
     Activity act = null;
     Timer timer;
+    Timer play_timer;
     Route route;
     private boolean recording = false;
     private boolean playing   = false;
@@ -26,6 +27,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
         super ();
         act = a;
         timer = new Timer();
+        play_timer = new Timer();
         route = new Route();
         Log.i("W", "w");
     }
@@ -34,6 +36,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
         this.wifiCtrl = wifCtrl;
         act = a;
         timer = new Timer();
+        play_timer = new Timer();
         route = new Route();
         Log.i("W", "w");
     }
@@ -83,6 +86,7 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
 
             case R.id.playButton:
                 playing ^= true;
+                play_timer.start();
                 break;
 
             case R.id.recordButton:
@@ -105,6 +109,26 @@ public class ClickListener implements View.OnClickListener, SeekBar.OnSeekBarCha
         if(playing && !recording) {
 
             // Should play on it's own thread.
+            int k=0;
+            while(k<route.getPathLength()) {
+                if(play_timer.getDuration() > route.getLocation(k).getTime()) {
+
+                    String signal = route.getLocation(k).getDirection();
+                    char spd = (char)route.getLocation(k).getSpeed();
+                    signal += spd;
+
+                    try {
+                        wifiCtrl.send(signal);
+                    } catch (Exception e) {
+                        sendEHandler();
+                    }
+
+                    play_timer.start();
+                    k++;
+                    Log.i("Playback Count", Integer.toString(k));
+                }
+            }
+
 
         } else {
             try {
